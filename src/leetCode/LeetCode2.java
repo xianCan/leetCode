@@ -1,7 +1,5 @@
 package leetCode;
 
-import java.util.Stack;
-
 /**
  * @authod xianCan
  * @date 2018/12/14 9:49
@@ -21,14 +19,14 @@ import java.util.Stack;
 public class LeetCode2 {
     public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
         ListNode head = new ListNode(0);
-        ListNode p = l1, q = l2,cur=head;
-        int carry=0;
-        while (p != null || q != null) {
-            int x = (p==null)?0:p.val;
-            int y = (q==null)?0:q.val;
-            int temp = x+y+carry;
-            carry=temp / 10;
-            cur.next = new ListNode(temp%10);
+        ListNode p = l1, q = l2, cur = head;
+        int carry = 0;
+        while (p != null || q != null){
+            int x = p == null ? 0 : p.val;
+            int y = q == null ? 0 : q.val;
+            int sum = x + y + carry;
+            carry = sum / 10; //得到进位
+            cur.next = new ListNode(sum % 10); //得到本位
             cur = cur.next;
             if (p != null) p = p.next;
             if (q != null) q = q.next;
