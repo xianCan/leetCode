@@ -1,7 +1,7 @@
-package leetCode;
+package leetCode.LeetCode_3;
 
-import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @authod xianCan
@@ -32,14 +32,14 @@ public class LeetCode3 {
     public int lengthOfLongestSubstring(String s) {
         if (s == null || "".equals(s)) return 0;
         char[] chars = s.toCharArray();
-        HashSet<Character> set = new HashSet<>();
-        int result=0;
-        for (int p=0,q=0;q<chars.length;){
-            if (!set.contains(chars[q])){
-                set.add(chars[q++]);
-                result = q-p>result ? q-p:result;
+        Set<Character> set = new HashSet<>();
+        int result = 0;
+        for (int l=0, r=0; r < chars.length; ){
+            if (!set.contains(chars[r])){
+                set.add(chars[r++]);
+                result = r - l > result ? r - l : result;
             } else {
-                set.remove(chars[p++]);
+                set.remove(chars[l++]);
             }
         }
         return result;
