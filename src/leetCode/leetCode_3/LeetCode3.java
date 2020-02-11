@@ -1,4 +1,4 @@
-package leetCode.LeetCode_3;
+package leetCode.leetCode_3;
 
 import java.util.HashSet;
 import java.util.Set;
