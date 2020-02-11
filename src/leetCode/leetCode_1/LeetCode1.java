@@ -29,6 +29,7 @@ public class LeetCode1 {
             } else
                 map.put(num, i);
         }
+
         return res;
     }
 }
