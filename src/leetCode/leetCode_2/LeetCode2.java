@@ -1,4 +1,4 @@
-package leetCode.LeetCode_2;
+package leetCode.leetCode_2;
 
 import leetCode.ListNode;
 
