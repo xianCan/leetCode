@@ -1,6 +1,7 @@
-package leetCode;
+package leetCode.leetCode_6;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @authod xianCan
@@ -25,26 +26,21 @@ public class LeetCode6 {
      * @return
      */
     public String convert(String s, int numRows) {
-        if (s==null)return "";
-        //如果指定行数为1行，直接返回原来的字符串
-        else if (numRows==1){
-            return s;
+        if(numRows <= 0 || "".equals(s)) return s;
+        List<StringBuilder> builderList = new ArrayList<>(numRows);
+        for (int i = 0; i < numRows; i++){
+            builderList.add(new StringBuilder());
         }
-        ArrayList<StringBuffer> list = new ArrayList<>();
-        for (int i=0;i<numRows;i++){
-            list.add(new StringBuffer());
+        int flag = 2 * numRows - 2;
+        for (int i = 0; i < s.length(); i++){
+            int tempIndex = i % flag;
+            int index = tempIndex < numRows ? tempIndex : flag - tempIndex;
+            builderList.get(index).append(s.charAt(i));
         }
-        int p=0;
-        boolean flag=false;
-        for (char c:s.toCharArray()){
-            list.get(p).append(c);
-            if (p==0 || p==numRows-1)flag=!flag;
-            p += flag ? 1:-1;
+        StringBuilder result = new StringBuilder();
+        for (StringBuilder builder : builderList){
+            result.append(builder);
         }
-        StringBuilder ret = new StringBuilder();
-        for (StringBuffer sb : list) {
-            ret.append(sb);
-        }
-        return ret.toString();
+        return result.toString();
     }
 }
