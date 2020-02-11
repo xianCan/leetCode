@@ -1,4 +1,4 @@
-package leetCode;
+package leetCode.leetCode_7;
 
 /**
  * @authod xianCan
@@ -23,7 +23,13 @@ package leetCode;
  * 假设我们的环境只能存储得下 32 位的有符号整数，则其数值范围为 [−231,  231 − 1]。请根据这个假设，如果反转后整数溢出那么就返回 0。
  */
 public class LeetCode7 {
-    public int reverse(int x) {
+
+    /**
+     * 从字符串角度出发
+     * @param x 需要反转的整数
+     * @return
+     */
+    public int reverseStr(int x) {
         String s = x+"";
         char[] chars = s.toCharArray();
         String intStr="";
@@ -33,15 +39,26 @@ public class LeetCode7 {
             border=1;
         }
         for(int i=chars.length-1;i>=border;i--){
-            intStr +=chars[i];
+            intStr += chars[i];
         }
         long l=Long.parseLong(intStr);
         return l>Integer.MAX_VALUE || l<Integer.MIN_VALUE ? 0 : (int) l;
     }
 
-    public static void main(String[] args){
-        LeetCode7 l = new LeetCode7();
-        int reverse = l.reverse(120);
-        System.out.println(reverse);
+    /**
+     * 从数字角度出发
+     * @param x 需要反转的整数
+     * @return
+     */
+    public int reverseInt(int x){
+        int rev = 0;
+        while (x != 0){
+            int newRev = rev * 10 + x % 10;
+            //如果反转计算得不到原来的结果，代表已经溢出整型最大值
+            if ((newRev - x % 10) / 10 != rev) return 0;
+            rev = newRev;
+            x /= 10;
+        }
+        return rev;
     }
 }
