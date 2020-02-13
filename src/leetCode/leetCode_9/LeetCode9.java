@@ -1,4 +1,4 @@
-package leetCode;
+package leetCode.leetCode_9;
 
 /**
  * @authod xianCan
@@ -44,16 +44,16 @@ public class LeetCode9 {
     }
 
     /**
-     * 不用字符串的解决办法
+     * 不用字符串的解决办法：将第7题的整数反转用起来
      * @param x 要检验的数字
      * @return
      */
     public boolean isPalindromeNotUserString(int x) {
-        if (x<0)return false;
-        int sum=0,n=x;
+        if (x < 0) return false;
+        int sum=0, n=x;
         while (n!=0){
             sum = sum*10 + n%10;
-            n /=10;
+            n /= 10;
         }
         return sum==x;
     }
