@@ -26,6 +26,9 @@ public class LeetCode34 {
 
     /**
      * 二分有三种形式：
+     * 如果右边界取数组长度，那么 while 循环里面写 left < right
+     * 如果右边界取数组长度-1，那么 while 循环里面写 left <= right
+     *
      * 1、寻找其中一个相等的即可：
      *      nums[mid] == target 时，直接return mid的下标值
      *
