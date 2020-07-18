@@ -1,6 +1,8 @@
 package leetCode.leetCode_3;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -29,19 +31,29 @@ import java.util.Set;
  *      请注意，你的答案必须是 子串 的长度，"pwke" 是一个子序列，不是子串。
  */
 public class LeetCode3 {
+
     public int lengthOfLongestSubstring(String s) {
-        if (s == null || "".equals(s)) return 0;
-        char[] chars = s.toCharArray();
-        Set<Character> set = new HashSet<>();
-        int result = 0;
-        for (int l=0, r=0; r < chars.length; ){
-            if (!set.contains(chars[r])){
-                set.add(chars[r++]);
-                result = r - l > result ? r - l : result;
-            } else {
-                set.remove(chars[l++]);
+        if (s == null || s.length() == 0) return 0;
+        Map<Character, Integer> window = new HashMap<>();
+
+        int left=0, right=0, len = 0;
+        while (right < s.length()){
+            char c = s.charAt(right);
+            right++;
+            window.put(c, window.getOrDefault(c, 0) + 1);
+
+            while (window.get(c) > 1){
+                char c1 = s.charAt(left);
+                left++;
+                window.put(c1, window.getOrDefault(c1, 0) -1);
             }
+            len = Math.max(len, right - left);
         }
-        return result;
+        return len;
+    }
+
+    public static void main(String[] args) {
+        int bbbbb = new LeetCode3().lengthOfLongestSubstring("abcabcbb");
+        System.out.println(bbbbb);
     }
 }
