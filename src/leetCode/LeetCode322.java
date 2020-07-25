@@ -1,5 +1,8 @@
 package leetCode;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @author xianCan
  * @date 2020/6/26 11:20
@@ -48,9 +51,34 @@ public class LeetCode322 {
         return costs[amount] == amount+1 ? -1 : costs[amount];
     }
 
+    public int coinChange2(int[] coins, int amount){
+        if (amount < 0) return -1;
+        Map<Integer, Integer> map = new HashMap<>();
+        map.put(0, 0);
+        return recursive(coins, amount, map);
+    }
+
+    private int recursive(int[] coins, int amount, Map<Integer, Integer> map) {
+        if (amount == 0) return 0;
+        if (amount < 0) return -1;
+        if (map.containsKey(amount)){
+            return map.get(amount);
+        }
+        int res = Integer.MAX_VALUE;
+        for (int coin : coins){
+            int subProblem = recursive(coins, amount - coin, map);
+            if (subProblem == -1){
+                continue;
+            }
+            res = Math.min(res, 1+subProblem);
+        }
+        map.put(amount, res != Integer.MAX_VALUE ? res : -1);
+        return res;
+    }
+
     public static void main(String[] args) {
         int[] coins = new int[]{1, 2, 5};
-        int i = new LeetCode322().coinChange(coins, 11);
+        int i = new LeetCode322().coinChange2(coins, 11);
         System.out.println(i);
     }
 }
