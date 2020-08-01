@@ -23,43 +23,37 @@ public class LeetCode15 {
         //保存结果
         List<List<Integer>> result = new ArrayList<>();
         if (nums==null || nums.length<3) return result;
-        //利用set来去除重复的数组
-        Set<List<Integer>> set = new HashSet<>();
-        //对数组进行排序，才能用二分查找
         Arrays.sort(nums);
-        for (int i=0;i<nums.length-2;i++){
-            //left和right当作两个指针
-            int left=i+1,right=nums.length-1;
+        int length = nums.length;
+        for (int i=0; i < length; i++){
+            int left=i+1, right=length-1, target = 0-nums[i];
             while (left<right){
-                int tempSum = nums[i]+nums[left]+nums[right];
-                if (tempSum==0){
-                    List<Integer> temp = new ArrayList<>();
-                    temp.add(nums[i]);
-                    temp.add(nums[left]);
-                    temp.add(nums[right]);
-                    set.add(temp);
-                    //跳过与当前数字重复的数字
-                    int j=nums[left],k=nums[right];
-                    while (j==nums[left]){
+                int tmp = nums[left] + nums[right];
+                if (target == tmp){
+                    result.add(Arrays.asList(nums[i], nums[left], nums[right]));
+                    while ((left+1 <= length-1) && nums[left] == nums[left+1]){
                         left++;
-                        if (left>=right)
-                            break;
                     }
-                    while (k==nums[right]){
+                    while ((right-1 >= 0) && nums[right-1] == nums[right]){
                         right--;
-                        if (left>=right)
-                            break;
                     }
-                }else if (tempSum<0){
                     left++;
-                }else {
+                    right--;
+                } else if (target > tmp){
+                    left++;
+                } else if (target < tmp){
                     right--;
                 }
             }
-        }
-        for (List<Integer> list:set){
-            result.add(list);
+            while (i < length-1 && nums[i] == nums[i+1]){
+                i++;
+            }
         }
         return result;
+    }
+
+    public static void main(String[] args) {
+        List<List<Integer>> lists = new LeetCode15().threeSum(new int[]{-1, 0, 1, 2, -1, -4});
+        System.out.println(lists);
     }
 }
