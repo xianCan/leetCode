@@ -8,6 +8,8 @@ import java.util.Stack;
  * @authod xianCan
  * @date 2018/12/21 16:05
  *
+ * 20. 有效的括号（简单）
+ *
  * 题目描述：
  *     给定一个只包括 '('，')'，'{'，'}'，'['，']' 的字符串，判断字符串是否有效。
  *
@@ -38,74 +40,34 @@ import java.util.Stack;
  */
 public class LeetCode20 {
 
-    /**
-     * 讨人厌的if解法
-     * @param s
-     * @return
-     */
-    @SuppressWarnings("all")
-    public boolean isValid(String s) {
-        if ("".equals(s))return true;
-        if (s.length()%2==1)return false;
-        Stack<Character> stack = new Stack<>();
-        for (int i=0;i<s.length();i++){
-            char c=s.charAt(i);
-            if ('('==c){
-                stack.push(c);
-            }else if ('['==c){
-                stack.push(c);
-            }else if ('{'==c){
-                stack.push(c);
-            }else if (')'==c){
-                if(stack.isEmpty()){
-                    return false;
-                }else if (stack.peek()!='('){
-                    return false;
-                }else {
-                    stack.pop();
-                }
-            }else if (']'==c){
-                if(stack.isEmpty()){
-                    return false;
-                }else if (stack.peek()!='['){
-                    return false;
-                }else {
-                    stack.pop();
-                }
-            }else if ('}'==c){
-                if(stack.isEmpty()){
-                    return false;
-                }else if (stack.peek()!='{'){
-                    return false;
-                }else {
-                    stack.pop();
-                }
-            }
-        }
-        if (stack.isEmpty())return true;
-        return false;
-    }
+    private static Map<Character, Character> map;
 
-    /**
-     * HashMap解法
-     * @param s
-     * @return
-     */
-    public boolean isValid2(String s) {
-        if ("".equals(s))return true;
-        if (s.length()%2==1)return false;
-        Map<Character, Character> map = new HashMap<>();
+    static {
+        map = new HashMap<>();
         map.put(')','(');
         map.put(']','[');
         map.put('}','{');
+    }
+
+
+    public boolean isValid(String s) {
+        if (s==null || "".equals(s)){
+            return true;
+        }
 
         Stack<Character> stack = new Stack<>();
-        for (int i=0;i<s.length();i++){
-            char c=s.charAt(i);
-            if (map.containsKey(c)) {
-                char topElement = stack.empty() ? '#' : stack.pop();
-                if (topElement != map.get(c)) return false;
-            } else stack.push(c);
+        int length = s.length();
+        for (int i=0; i<length; i++){
+            char indC = s.charAt(i);
+            Character character1 = map.get(indC);
+            if (character1 == null){
+                stack.push(indC);
+            } else {
+                Character character2 = stack.isEmpty() ? null : stack.pop();
+                if (character1 != character2){
+                    return false;
+                }
+            }
         }
         return stack.isEmpty();
     }
