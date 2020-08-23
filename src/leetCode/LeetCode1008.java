@@ -29,17 +29,19 @@ import java.util.Stack;
  */
 public class LeetCode1008 {
 
+    private int idx=0;
+
     /**
      * 递归：维护一个二元组(lower, upper)代表当前节点可以插入的值的上下界
      * @param preorder
      * @return
      */
     public TreeNode bstFromPreorder(int[] preorder) {
-        return helper(Integer.MIN_VALUE, Integer.MAX_VALUE, 0, preorder);
+        return helper(Integer.MIN_VALUE, Integer.MAX_VALUE, preorder);
 
     }
 
-    private TreeNode helper(int lower, int upper, int idx, int[] preorder) {
+    private TreeNode helper(int lower, int upper, int[] preorder) {
         if (idx == preorder.length) return null;
 
         int val = preorder[idx];
@@ -47,8 +49,8 @@ public class LeetCode1008 {
 
         idx++;
         TreeNode root = new TreeNode(val);
-        root.left = helper(lower, val, idx, preorder);
-        root.right = helper(val, upper, idx, preorder);
+        root.left = helper(lower, val, preorder);
+        root.right = helper(val, upper, preorder);
         return root;
     }
 
