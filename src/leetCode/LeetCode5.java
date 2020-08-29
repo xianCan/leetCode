@@ -59,23 +59,39 @@ public class LeetCode5 {
     public String longestPalindrome2(String s){
         int len = s.length();
         if (len < 2) return s;
+        //将奇偶字符串统一处理为奇字符串
         String str = addDividers(s, '#');
         int strLen = str.length();
 
-        int[] dp = new int[strLen];
+        int[] dp = new int[strLen];//dp[i] 数组表示以 i 为中心时的最长回文半径
 
-        int center = 0;
-        int maxRight = 0;
+        int center = 0;//最右回文串的中心点
+        int maxRight = 0;//最右回文串的右下标
 
-        int maxLen = 1;
-        int begin = 0;
+        int maxLen = 1;//当前遍历的中心最大扩散步数，其值等于原始字符串的最长回文子串的长度
+        int begin = 0;//原始字符串的最长回文子串的起始位置，与 maxLen 必须同时更新
         char[] charArray = str.toCharArray();
         for (int i=0; i<strLen; i++){
+            /**
+             * 如果 i >= maxRight， 只能老老实实走中心扩展法
+             * 如果 i < maxRight，可以使用回文串特性进行优化
+             */
             if (i < maxRight){
                 int mirror = 2*center-i;
+                /**
+                 * 核心代码：
+                 *
+                 * 定义 mirror 为 i 关于 center 的对称点
+                 * 1、当 dp[mirror] < maxRight-i，有 p[i] = p[mirror] < maxRight - i
+                 * 2、当 dp[mirror] = maxRight-i，有 p[i] 至少等于 maxRight - i， 然后需要从 maxRight 开始尝试中心扩展法
+                 * 3、当 dp[mirror] > maxRight-i，有 p[i] = maxRight - i
+                 *
+                 * 综合三种情况，p[i] = min(p[mirror], mqxRight - i)，然后尝试中心扩散
+                 */
                 dp[i] = Math.min(maxRight-i, dp[mirror]);
             }
 
+            //中心扩展法：下一次尝试扩散的左右起点，能扩散的步数直接加到 p[i] 中
             int left = i-(1 + dp[i]);
             int right = i+(1 + dp[i]);
             while (left >=0 && right < strLen && charArray[left]==charArray[right]){
@@ -84,11 +100,15 @@ public class LeetCode5 {
                 right++;
             }
 
+            //维护maxRight和center
+            //根据 maxRight 的定义，它是遍历过的 i 的 i + p[i] 的最大者
+            // 如果 maxRight 的值越大，进入上面 i < maxRight 的判断的可能性就越大，这样就可以重复利用之前判断过的回文信息了
             if (i + dp[i] > maxRight){
                 maxRight = i + dp[i];
                 center = i;
             }
 
+            // 记录最长回文子串的长度和相应它在原始字符串中的起点，不用再去遍历多一次
             if (dp[i] > maxLen){
                 maxLen = dp[i];
                 begin = (i-maxLen)/2;
