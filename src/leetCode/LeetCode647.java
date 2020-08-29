@@ -61,6 +61,8 @@ public class LeetCode647 {
 
     /**
      * 以中心点扩充，区分单中心点和双中心点
+     * 时间复杂度：O(N^2)
+     * 空间复杂度：O(1)
      * @param s
      * @return
      */
@@ -84,8 +86,56 @@ public class LeetCode647 {
         return res;
     }
 
+    /**
+     * 马拉车算法
+     * 时间复杂度：O(N)
+     * 空间复杂度：O(N)
+     * @param s
+     * @return
+     */
+    public int countSubstrings3(String s){
+        if (s == null || s.length() == 0)return 0;
+        StringBuilder builder = new StringBuilder();
+        for (int i=0; i<s.length(); i++){
+            builder.append('#');
+            builder.append(s.charAt(i));
+        }
+        builder.append('#');
+
+        String str = builder.toString();
+        int strLength = str.length();
+
+        int[] dp = new int[strLength];
+        int center=0, maxRight=0, res=0;
+
+        for (int i=0; i<strLength; i++){
+            if (i < maxRight){
+                int mirror = 2*center-i;
+                dp[i] = Math.min(dp[mirror], maxRight-i);
+            }
+
+            int left = i-(dp[i]+1);
+            int right = i+(dp[i]+1);
+
+            while (left>=0 && right<strLength && str.charAt(left)==str.charAt(right)){
+                dp[i]++;
+                left--;
+                right++;
+            }
+
+            if (i+dp[i] > maxRight){
+                center = i;
+                maxRight = i+dp[i];
+            }
+
+            res += (dp[i]+1) / 2; //更新res，策略为dp[i] / 2 向上取整
+        }
+
+        return res;
+    }
+
     public static void main(String[] args) {
-        int aaa = new LeetCode647().countSubstrings2("abc");
+        int aaa = new LeetCode647().countSubstrings3("aaaa");
         System.out.println(aaa);
     }
 }
