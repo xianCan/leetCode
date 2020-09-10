@@ -1,9 +1,6 @@
 package leetCode;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author xianCan
@@ -73,6 +70,24 @@ public class LeetCode40 {
             linkedList.add(candidates[i]);
             help(i+1, target-candidates[i], linkedList);
             linkedList.removeLast();
+        }
+    }
+
+    //去重笨办法
+    private void helper(List<List<Integer>> res){
+        Set<String> set = new HashSet<>();
+        Iterator<List<Integer>> iterator = res.iterator();
+        while (iterator.hasNext()){
+            List<Integer> next = iterator.next();
+            StringBuilder builder = new StringBuilder();
+            for (Integer i : next){
+                builder.append(i);
+            }
+            if (set.contains(builder.toString())){
+                iterator.remove();
+            } else {
+                set.add(builder.toString());
+            }
         }
     }
 
