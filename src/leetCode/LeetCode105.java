@@ -1,8 +1,5 @@
 package leetCode;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * @author xianCan
  * @date 2020/8/23 19:44
@@ -29,17 +26,17 @@ import java.util.Map;
  */
 public class LeetCode105 {
 
-    private int idx=0;
+    /*private int idx=0;
     private int length;
     private int[] preorder;
     private Map<Integer, Integer> map;
 
-    /**
+    *//**
      * 递归
      * @param preorder
      * @param inorder
      * @return
-     */
+     *//*
     public TreeNode buildTree(int[] preorder, int[] inorder) {
         this.length = preorder.length;
         this.preorder = preorder;
@@ -61,5 +58,35 @@ public class LeetCode105 {
         root.left = helper(i1, mid-1);
         root.right = helper(mid+1, i2);
         return root;
+    }*/
+
+    private int[] preorder;
+    private int[] inorder;
+
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+        this.preorder = preorder;
+        this.inorder = inorder;
+        return helper(0, preorder.length-1, 0, inorder.length-1);
+    }
+
+    private TreeNode helper(int preStart, int preEnd, int inStart, int inEnd){
+        if (inStart > inEnd){
+            return null;
+        }
+
+        int index = 0;
+        for (int i=inStart; i<=inEnd; i++){
+            if (preorder[preStart] == inorder[i]){
+                index = i;
+                break;
+            }
+        }
+
+        int leftSize = index - inStart;
+
+        TreeNode node = new TreeNode(preorder[preStart]);
+        node.left = helper(preStart+1, preStart+leftSize, inStart, inStart+leftSize-1);
+        node.right = helper(preStart+leftSize+1, preEnd, inStart+leftSize+1, inEnd);
+        return node;
     }
 }
