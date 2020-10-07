@@ -1,6 +1,7 @@
 package leetCode;
 
 import java.util.PriorityQueue;
+import java.util.Random;
 
 /**
  * @author xianCan
@@ -39,6 +40,49 @@ public class LeetCode215 {
             }
         }
         return queue.peek();
+    }
+
+    private int[] nums;
+
+    public int findKthLargest2(int[] nums, int k){
+        this.nums = nums;
+        int len = nums.length;
+        int targetIndex = len - k;
+        int left = 0, right = len - 1;
+        while (true){
+            int i = partition(left, right);
+            if (i == targetIndex){
+                return nums[i];
+            } else if (i < targetIndex){
+                left = i + 1;
+            } else {
+                right = i-1;
+            }
+        }
+    }
+
+    private int partition(int left, int right){
+        if (right > left){
+            int random = left + new Random().nextInt(right-left);
+            swap(right, random);
+        }
+
+        int i = left;
+        int pivot = nums[right];
+        for (int j=left; j<right; j++){
+            if (nums[j] < pivot){
+                swap(i, j);
+                i++;
+            }
+        }
+        swap(i, right);
+        return i;
+    }
+
+    private void swap(int idx1, int idx2){
+        int tmp = nums[idx1];
+        nums[idx1] = nums[idx2];
+        nums[idx2] = tmp;
     }
 
     public static void main(String[] args) {
