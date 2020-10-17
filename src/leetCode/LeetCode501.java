@@ -1,6 +1,8 @@
 package leetCode;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -37,6 +39,11 @@ public class LeetCode501 {
     private int max;
     private int len;
 
+    /**
+     * 二叉树的做法
+     * @param root
+     * @return
+     */
     public int[] findMode(TreeNode root) {
         this.map = new HashMap<>();
         this.max = 0;
@@ -66,5 +73,47 @@ public class LeetCode501 {
         map.put(node.val, tmp);
         helper(node.left);
         helper(node.right);
+    }
+
+    private List<Integer> list = new ArrayList<>();
+    private int maxCount=0, count=0;
+    private TreeNode pre=null;
+
+
+    /**
+     * 二叉搜索树的做法
+     * @param root
+     * @return
+     */
+    public int[] findMode2(TreeNode root){
+        dfs(root);
+        int[] ans = new int[list.size()];
+        for (int i=0; i<ans.length; i++){
+            ans[i] = list.get(i);
+        }
+        return ans;
+    }
+
+    private void dfs(TreeNode node){
+        if (node == null)return;
+
+        dfs(node.left);
+        if (pre == null){
+            count=1;
+        } else if (pre.val == node.val){
+            count++;
+        } else {
+            count=1;
+        }
+        pre = node;
+
+        if (count == maxCount){
+            list.add(node.val);
+        } else if (count > maxCount){
+            maxCount = count;
+            list.clear();
+            list.add(node.val);
+        }
+        dfs(node.right);
     }
 }
