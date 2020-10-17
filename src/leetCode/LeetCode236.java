@@ -80,14 +80,15 @@ public class LeetCode236 {
         }
     }
 
-    private TreeNode ans;
-
     /**
      * 方法二：递归
      *
-     * 定义 fx 表示 x 节点的子树中是否包含 p 节点或 q 节点，如果包含为 true，否则为 false
-     *
-     * 最近公共祖先满足：x = (flson && frson) ∣∣ ((x = p ∣∣ x = q) && (flson ∣∣ frson))
+     *  1.求最小公共祖先，需要从底向上遍历，那么二叉树，只能通过后序遍历（即：回溯）实现从低向上的遍历方式。
+
+        2.在回溯的过程中，必然要遍历整颗二叉树，即使已经找到结果了，依然要把其他节点遍历完，
+        因为要使用递归函数的返回值（也就是代码中的left和right）做逻辑判断。
+
+        3.要理解如果返回值left为空，right不为空为什么要返回right，为什么可以用返回right传给上一层结果。
      *
      * 时间复杂度：O(N)
      * 空间复杂度：O(N)
@@ -97,18 +98,12 @@ public class LeetCode236 {
      * @return
      */
     public TreeNode lowestCommonAncestor2(TreeNode root, TreeNode p, TreeNode q) {
-        dfs(root, p, q);
-        return ans;
-    }
-
-    private boolean dfs(TreeNode root, TreeNode p, TreeNode q){
-        if (root == null)return false;
-        boolean lson = dfs(root.left, p, q);
-        boolean rson = dfs(root.right, p, q);
-        if ((lson && rson) || ((root.val == p.val || root.val == q.val) && (lson || rson))){
-            ans = root;
-        }
-        return lson || rson || (root.val == p.val || root.val == q.val);
+        if (root == null || root == q || root == p)return root;
+        TreeNode left = lowestCommonAncestor2(root.left, p, q);
+        TreeNode right = lowestCommonAncestor2(root.right, p, q);
+        if (left != null && right != null) return root;
+        if (left == null) return right;
+        return left;
     }
 
     public static void main(String[] args) {
