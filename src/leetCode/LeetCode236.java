@@ -101,7 +101,10 @@ public class LeetCode236 {
         if (root == null || root == q || root == p)return root;
         TreeNode left = lowestCommonAncestor2(root.left, p, q);
         TreeNode right = lowestCommonAncestor2(root.right, p, q);
+
+        //如果left 和 right都不为空，说明此时root就是最近公共节点。
         if (left != null && right != null) return root;
+        //如果left为空，right不为空，就返回right，说明目标节点是通过right返回的，反之依然
         if (left == null) return right;
         return left;
     }
