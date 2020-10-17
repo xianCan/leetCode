@@ -54,20 +54,19 @@ public class LeetCode19 {
      * @return
      */
     public ListNode removeNthFromEndSearchOne(ListNode head, int n) {
-        //弄一个-1的节点
-        ListNode newHead = new ListNode(-1),quick=newHead,slow=newHead;
-        quick.next=head;
-        while (quick!=null){
-            if (n>=1){
-                quick=quick.next;
+        ListNode newHead = new ListNode(0);
+        ListNode quick=newHead, slow=newHead, pre;
+        quick.next = head;
+        while (quick != null){
+            if (n > 0){
+                quick = quick.next;
                 n--;
-            }else {
-                ListNode pre=slow;
+            } else {
+                pre = slow;
                 slow = slow.next;
                 quick = quick.next;
-                if (quick==null){
+                if (quick == null){
                     pre.next = slow.next;
-                    break;
                 }
             }
         }
