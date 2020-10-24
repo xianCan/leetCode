@@ -27,6 +27,7 @@ public class LeetCode538 {
     private int sum=0;
 
     public TreeNode convertBST(TreeNode root) {
+        //二叉搜索树中序遍历是顺序的，那么按照右根左（反中序遍历）的顺序遍历，就是倒序的，也就是从后往前遍历
         if (root != null){
             convertBST(root.right);
             sum += root.val;
