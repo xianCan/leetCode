@@ -39,13 +39,13 @@ import java.util.*;
 public class LeetCode40 {
 
     private int[] candidates;
-    private int len;
     private List<List<Integer>> res;
+    private boolean[] used;
 
     public List<List<Integer>> combinationSum2(int[] candidates, int target) {
         Arrays.sort(candidates);
         this.candidates = candidates;
-        this.len = candidates.length;
+        this.used = new boolean[candidates.length];
         this.res = new ArrayList<>();
         help(0, target, new LinkedList<>());
         return res;
@@ -56,19 +56,26 @@ public class LeetCode40 {
             res.add(new ArrayList<>(linkedList));
         }
 
-        for (int i=start; i<len; i++){
+        for (int i=start; i<candidates.length; i++){
             //大剪枝
             if (target - candidates[i] < 0){
                 break;
             }
 
-            //小剪枝：同一层相同数值的结点，从第 2 个开始，候选数更少，结果一定发生重复，因此跳过，用 continue
-            if (i > start && candidates[i] == candidates[i-1]){
+            //理解1：小剪枝：同一层相同数值的结点，从第 2 个开始，候选数更少，结果一定发生重复，因此跳过，用 continue
+
+            /**
+             *  理解2：都知道组合问题可以抽象为树形结构，那么“使用过”在这个树形结构上是有一个维度是同一树枝上使用过，一个维度是同一树层上使用过。
+                「没有理解这两个层面上的“使用过” 是造成大家没有彻底理解去重的根本原因。」
+             */
+            if (i > 0 && candidates[i] == candidates[i-1] && !used[i-1]){
                 continue;
             }
 
             linkedList.add(candidates[i]);
+            used[i]=true;
             help(i+1, target-candidates[i], linkedList);
+            used[i]=false;
             linkedList.removeLast();
         }
     }
