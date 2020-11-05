@@ -1,6 +1,7 @@
 package leetCode;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -21,95 +22,54 @@ import java.util.List;
  */
 public class LeetCode93 {
 
+    private List<String> ans;
+    private String s;
+
     /**
      * 暴力
      * @param s
      * @return
      */
     public List<String> restoreIpAddresses(String s) {
-        List<String> result = new ArrayList<>();
-        if (s==null || s.length() < 4 || s.length() > 12) return result;
-        int length = s.length();
-
-        for (int i=1; i<=3 && i < length - 2; i++) {
-            for (int j = i; j < i + 4 && j < length - 1; j++) {
-                for (int k = j; k < j + 4 && k < length; k++) {
-                    String s1 = s.substring(0, i);
-                    String s2 = s.substring(i, j);
-                    String s3 = s.substring(j, k);
-                    String s4 = s.substring(k);
-                    if(predicate(s1)&&predicate(s2)&&predicate(s3)&&predicate(s4)){
-                        StringBuilder sb = new StringBuilder();
-                        sb.append(s1); sb.append(".");
-                        sb.append(s2); sb.append(".");
-                        sb.append(s3); sb.append(".");
-                        sb.append(s4);
-                        result.add(sb.toString());
-                    }
-                }
-            }
-        }
-        return result;
+        this.ans = new ArrayList<>();
+        this.s = s;
+        if (s.length() < 4 || s.length() > 12)return ans;
+        recursive(0, new LinkedList<>());
+        return ans;
     }
 
-    private boolean predicate(String s){
-        if (s.length() == 0)return false;
-        if (s.length() == 1)return true;
-        if (s.length() > 3) return false;
-        if (s.charAt(0) == '0') return false;
-        if (Integer.parseInt(s) <= 255) return true;
+    private void recursive(int start, LinkedList<String> path){
+        if (start==s.length() && path.size()==4){
+            ans.add(String.join(".", path));
+            return;
+        }
+
+        for (int i=start; i<s.length(); i++){
+            if (i-start > 2){
+                break;
+            }
+            if (predicate(start, i)){
+                path.add(s.substring(start, i+1));
+                recursive(i+1, path);
+                path.removeLast();
+            }
+        }
+    }
+
+    private boolean predicate(int left, int right){
+        if (s.charAt(left)=='0' && right==left){
+            return true;
+        } else if (s.charAt(left)=='0'){
+            return false;
+        } else if (Integer.parseInt(s.substring(left, right+1)) <= 255){
+            return true;
+        }
         return false;
     }
 
-    /**
-     * 回溯
-     * @param s
-     * @return
-     */
-    public List<String> restoreIpAddresses2(String s) {
-        List<String> result = new ArrayList<>();
-        if (s==null || s.length() < 4 || s.length() > 12) return result;
-        int[] segments = new int[4];
-        recursive(s,0,0, segments, result);
-        return result;
-    }
-
-    private void recursive(String s, int segId, int segStart, int[] segments, List<String> result){
-        if (segId == 4 && segStart == s.length()){
-            StringBuilder builder = new StringBuilder();
-            for (int i=0; i<4; i++){
-                builder.append(segments[i]);
-                if (i != 3){
-                    builder.append(".");
-                }
-            }
-            result.add(builder.toString());
-            return;
-        } else if (segStart == s.length() || segId == 4){
-            return;
-        }
-
-        if (s.charAt(segStart) == '0'){
-            segments[segId] = 0;
-            recursive(s, segId+1, segStart+1, segments, result);
-        }
-
-        int addr=0;
-        for (int segEnd=segStart; segEnd < s.length(); segEnd++){
-            addr = addr * 10 + (s.charAt(segEnd) - '0');
-            if (addr > 0 && addr <= 0xFF) {
-                segments[segId] = addr;
-                recursive(s, segId+1,segEnd+1, segments, result);
-            } else {
-                break;
-            }
-        }
-    }
-
-
 
     public static void main(String[] args) {
-        List<String> strings = new LeetCode93().restoreIpAddresses2("020000");
+        List<String> strings = new LeetCode93().restoreIpAddresses("000000");
         for (String s : strings){
             System.out.println(s);
         }
