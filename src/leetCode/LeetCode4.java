@@ -48,11 +48,89 @@ public class LeetCode4 {
         return new Double(((merge[mergeLength/2])+merge[mergeLength/2-1])/2.0);
     }
 
+    /**
+     * O(min(m, n))
+     * @param nums1
+     * @param nums2
+     * @return
+     */
+    public double findMedianSortedArrays2(int[] nums1, int[] nums2) {
+        if (nums1.length > nums2.length) {
+            return findMedianSortedArrays2(nums2, nums1);
+        }
+
+        int m = nums1.length;
+        int n = nums2.length;
+        int totalLeft = (m + n + 1) / 2;
+
+        for (int i=0; i<=m; i++){
+            int j = totalLeft - i;
+
+            int maxLeft1 = i==0 ? Integer.MIN_VALUE : nums1[i-1];
+            int minRight1 = i==m ? Integer.MAX_VALUE : nums1[i];
+
+            int maxLeft2 = j==0 ? Integer.MIN_VALUE : nums2[j-1];
+            int minRight2 = j==n ? Integer.MAX_VALUE : nums2[j];
+
+            if (maxLeft1 <= minRight2 && maxLeft2 <= minRight1){
+                if ( (m+n) % 2 == 1){
+                    return (double) Math.max(maxLeft1, maxLeft2);
+                } else {
+                    return (Math.max(maxLeft1, maxLeft2) + Math.min(minRight1, minRight2)) / 2.0;
+                }
+            }
+        }
+        throw new IllegalArgumentException();
+    }
+
+    /**
+     * O(log min(m, n))
+     * @param nums1
+     * @param nums2
+     * @return
+     */
+    public double findMedianSortedArrays3(int[] nums1, int[] nums2) {
+        if (nums1.length > nums2.length) {
+            return findMedianSortedArrays3(nums2, nums1);
+        }
+
+        int m = nums1.length;
+        int n = nums2.length;
+        int left=0, right=m, totalLeft = (m+n+1) / 2;
+
+        while (left <= right){
+            int i = (left + right) / 2;
+            int j = totalLeft - i;
+
+            int maxLeft1 = i==0 ? Integer.MIN_VALUE : nums1[i-1];
+            int minRight1 = i==m ? Integer.MAX_VALUE : nums1[i];
+
+            int maxLeft2 = j==0 ? Integer.MIN_VALUE : nums2[j-1];
+            int minRight2 = j==n ? Integer.MAX_VALUE : nums2[j];
+
+            if (maxLeft1 <= minRight2 && maxLeft2 <= minRight1){
+                if ( (m+n) % 2 == 1){
+                    return (double) Math.max(maxLeft1, maxLeft2);
+                } else {
+                    return (Math.max(maxLeft1, maxLeft2) + Math.min(minRight1, minRight2)) / 2.0;
+                }
+            } else if (maxLeft1 > minRight2){
+                //i太靠右了，往左倾斜
+                right = i - 1;
+            } else {
+                //i太靠左了，往右倾斜
+                left = i + 1;
+            }
+        }
+
+        throw new IllegalArgumentException();
+    }
+
     public static void main(String[] args){
-        int[] nums1 = new int[]{1,2,3};
-        int[] nums2 = new int[]{};
+        int[] nums1 = new int[]{};
+        int[] nums2 = new int[]{2,4,6,12,18,20};
         LeetCode4 l = new LeetCode4();
-        double v = l.findMedianSortedArrays(nums1, nums2);
+        double v = l.findMedianSortedArrays2(nums1, nums2);
         System.out.println(v);
     }
 }
