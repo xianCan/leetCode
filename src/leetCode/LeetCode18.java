@@ -73,8 +73,53 @@ public class LeetCode18 {
         return ans;
     }
 
+    public List<List<Integer>> nSum(int[] nums, int target, int n) {
+        if (nums == null || n < 2 || nums.length < n){
+            return new ArrayList<>();
+        }
+        return helper(nums, target, n, 0);
+    }
+
+    private List<List<Integer>> helper(int[] nums, int target, int n, int start){
+        List<List<Integer>> ans = new ArrayList<>();
+        if (n == 2){
+            int left=start, right=nums.length-1;
+            while (left < right){
+                if (nums[left] + nums[right] == target){
+                    ans.add(Arrays.asList(nums[left], nums[right]));
+                    left++;
+                    right--;
+                    while (left < right && nums[left]==nums[left-1]){
+                        left++;
+                    }
+                    while (left < right && nums[right]==nums[right+1]){
+                        right--;
+                    }
+                } else if (nums[left] + nums[right] < target){
+                    left++;
+                } else {
+                    right--;
+                }
+            }
+        } else if (n > 2){
+            for (int i=start; i<nums.length; i++){
+                if (i > start+1 && nums[i]==nums[i-1]){
+                    continue;
+                }
+                List<List<Integer>> listList = helper(nums, target - nums[i], n - 1, i + 1);
+                for (List<Integer> list : listList){
+                    List<Integer> tmp = new ArrayList<>();
+                    tmp.addAll(list);
+                    tmp.add(nums[i]);
+                    ans.add(tmp);
+                }
+            }
+        }
+        return ans;
+    }
+
     public static void main(String[] args) {
-        List<List<Integer>> lists = new LeetCode18().fourSum(new int[]{0,4,-5,2,-2,4,2,-1,4}, 12);
+        List<List<Integer>> lists = new LeetCode18().nSum(new int[]{0,4,-5,2,-2,4,2,-1,4}, 12, 4);
         lists.forEach(System.out::println);
     }
 }
