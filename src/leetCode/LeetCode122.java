@@ -68,17 +68,14 @@ public class LeetCode122 {
 
     public int maxProfit2(int[] prices) {
         int n = prices.length;
-        int[][] dp = new int[n][2];
-        for (int i=0; i<n; i++){
-            if (i==0){
-                dp[0][0] = 0;
-                dp[0][1] = - prices[0];
-                continue;
-            }
-            dp[i][0] = Math.max(dp[i-1][0], dp[i-1][1] + prices[i]);
-            dp[i][1] = Math.max(dp[i-1][1], dp[i-1][0] - prices[i]);
+        int[] dp1 = new int[n+1]; // 没有持有
+        int[] dp2 = new int[n+1]; // 持有
+        dp2[0] = Integer.MIN_VALUE;
+        for (int i=1; i<=n; i++){
+            dp1[i] = Math.max(dp1[i-1], dp2[i-1]+prices[i-1]);
+            dp2[i] = Math.max(dp2[i-1], dp1[i-1]-prices[i-1]);
         }
-        return dp[n-1][0];
+        return dp1[n];
     }
 
     public static void main(String[] args) {
