@@ -112,6 +112,42 @@ public class LeetCode376 {
         return ans;
     }
 
+    /**
+     * 贪心+模拟
+     * @param nums
+     * @return
+     */
+    public int wiggleMaxLength4(int[] nums) {
+        if (nums == null || nums.length == 0){
+            return 0;
+        }
+
+        int ans = 1;
+        int pre = nums[0];
+        int flag = 0;
+
+        for (int i=1; i < nums.length; i++){
+            if (flag == 0 && nums[0] != nums[i]){
+                flag = nums[i] > pre ? 1 : -1;
+                pre = nums[i];
+                ans++;
+            } else if (flag == 1 && nums[i] > pre){
+                pre = nums[i];
+            } else if (flag == 1 && nums[i] < pre){
+                flag = -1;
+                pre = nums[i];
+                ans++;
+            } else if ( nums[i] < pre){
+                pre = nums[i];
+            } else if (flag == -1 && nums[i] > pre){
+                flag = 1;
+                pre = nums[i];
+                ans++;
+            }
+        }
+        return ans;
+    }
+
     public static void main(String[] args) {
         int i = new LeetCode376().wiggleMaxLength3(new int[]{1,10,17,14,16});
         System.out.println(i);
