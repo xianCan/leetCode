@@ -116,6 +116,29 @@ public class LeetCode134 {
         return -1;
     }
 
+    /**
+     * 当前累加rest[j]的和curSum一旦小于0，起始位置至少要是j+1，因为从j开始一定不行
+     *
+     * 如果x到不了y+1（但能到y），那么从x到y的任一点出发都不可能到达y+1。因为从其中任一点出发的话，相当于从0开始加油，
+     * 而如果从x出发到该点则不一定是从0开始加油，可能还有剩余的油。既然不从0开始都到不了y，那么从0开始就更不可能到达y了
+     * @param gas
+     * @param cost
+     * @return
+     */
+    public int canCompleteCircuit3(int[] gas, int[] cost) {
+        int curSum=0, totalSum=0, start=0;
+        for (int i=0; i < gas.length; i++){
+            curSum += gas[i] - cost[i];
+            totalSum += gas[i] - cost[i];
+            if (curSum < 0){
+                start = i + 1;
+                curSum = 0;
+            }
+        }
+        if (totalSum < 0) return -1;
+        return start;
+    }
+
     public static void main(String[] args) {
         int i = new LeetCode134().canCompleteCircuit2(new int[]{2,3,4}, new int[]{3,4,3});
         System.out.println(i);
