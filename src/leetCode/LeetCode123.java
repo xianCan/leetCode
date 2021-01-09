@@ -1,5 +1,7 @@
 package leetCode;
 
+import java.util.Arrays;
+
 /**
  * @author xianCan
  * @date 2020/7/19 11:17
@@ -81,6 +83,24 @@ public class LeetCode123 {
 
         }
         return Math.max(dp_i_1_0, dp_i_2_0);
+    }
+
+    public int maxProfit3(int[] prices) {
+        int len = prices.length;
+        int[][] buy = new int[len + 1][3];//没有持有
+        int[][] sell = new int[len + 1][3];//持有
+
+        Arrays.fill(sell[0], Integer.MIN_VALUE / 2);
+
+        for (int i = 1; i <= len; i++){
+            buy[i][1] = Math.max(buy[i-1][1], sell[i-1][1] + prices[i-1]);
+            buy[i][2] = Math.max(buy[i-1][2], sell[i-1][2] + prices[i-1]);
+
+            sell[i][1] = Math.max(sell[i-1][1], buy[i-1][0] - prices[i-1]);
+            sell[i][2] = Math.max(sell[i-1][2], buy[i-1][1] - prices[i-1]);
+        }
+
+        return Math.max(buy[len][1], buy[len][2]);
     }
 
     public static void main(String[] args) {
