@@ -1,6 +1,4 @@
-package leetCode.leetCode_2;
-
-import leetCode.ListNode;
+package leetCode;
 
 /**
  * @authod xianCan
