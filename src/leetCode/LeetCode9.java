@@ -1,4 +1,4 @@
-package leetCode.leetCode_9;
+package leetCode;
 
 /**
  * @authod xianCan
