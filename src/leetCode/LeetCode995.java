@@ -40,6 +40,27 @@ package leetCode;
  */
 public class LeetCode995 {
 
+    /**
+     *
+         令A[-1]为0，则根据递推公式，
+
+         diff[0] = A[0]的翻转次数 - A[-1]的翻转次数
+         diff[1] = A[1]的翻转次数 - A[0]的翻转次数
+         diff[2] = A[2]的翻转次数 - A[1]的翻转次数
+         diff[3] = A[3]的翻转次数 - A[2]的翻转次数
+         ...
+         diff[i] = A[i]的翻转次数 - A[i-1]的翻转次数
+         将以上式子累加得到
+
+         sum(diff[0..i]) = A[i]， 即所谓的差分数组的前缀和就是A[i]的翻转次数。
+
+         差分数组的+1，-1操作可以理解为从**电平触发**转换为**边沿触发**，从而通过一个前缀和变量来优化暴力解法中的内层循环。
+
+         但在写具体的代码的时候，还需要搞清楚差分数组与原数组的对应关系。由于还有一个A[-1]的存在，可以将diff数组整体往后移一位，因此是diff[i+1]++, diff[i+k]--
+     * @param A
+     * @param K
+     * @return
+     */
     public int minKBitFlips(int[] A, int K) {
         int n = A.length;
         int[] diff = new int[n + 1];
@@ -50,9 +71,9 @@ public class LeetCode995 {
                 if (i + K > n) {
                     return -1;
                 }
-                ++ans;
-                ++revCnt;
+                ++diff[i + 1];
                 --diff[i + K];
+                ++ans;
             }
         }
         return ans;
