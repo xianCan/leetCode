@@ -1,5 +1,6 @@
 package leetCode;
 
+import java.util.Arrays;
 import java.util.Stack;
 
 /**
@@ -23,18 +24,20 @@ import java.util.Stack;
 public class LeetCode503 {
 
     public int[] nextGreaterElements(int[] nums) {
-        if (nums==null)return null;
         int len = nums.length;
         int[] ans = new int[len];
+        Arrays.fill(ans, -1);
         Stack<Integer> stack = new Stack<>();
-
-        for (int i=len-1; i>=0; i--){
-
+        for (int i = 0; i < len * 2 - 1; i++) {
+            while (!stack.isEmpty() && nums[stack.peek()] < nums[i % len]) {
+                ans[stack.pop()] = nums[i % len];
+            }
+            stack.push(i % len);
         }
-
         return ans;
     }
 
     public static void main(String[] args) {
+
     }
 }
