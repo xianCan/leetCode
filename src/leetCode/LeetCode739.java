@@ -35,4 +35,20 @@ public class LeetCode739 {
         }
         return ans;
     }
+
+    public int[] dailyTemperatures2(int[] T){
+        int len = T.length;
+        int[] ans = new int[len];
+        //存放元素索引，而不是元素
+        Stack<Integer> stack = new Stack<>();
+
+        for (int i = 0; i < len; i++){
+            while (!stack.isEmpty() && T[stack.peek()] < T[i]){
+                Integer t = stack.pop();
+                ans[t] = i - t;
+            }
+            stack.push(i);
+        }
+        return ans;
+    }
 }
