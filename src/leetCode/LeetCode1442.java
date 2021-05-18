@@ -51,6 +51,16 @@ package leetCode;
  */
 public class LeetCode1442 {
 
+    /**
+     * 本题主要利用异或运算中的「相同数值进行运算结果为 0」的特性。
+
+     对于特定数组 [a1,a2,a3,...,an]，要求得任意区间 [l, r]的异或结果，可以通过 [1, r] 和 [1, l - 1] 的异或结果得出：
+
+     xor(l, r) = xor(1, r) ⊕ xor(1, l - 1)
+
+     本质上还是利用集合（区间结果）的容斥原理。只不过前缀和需要利用「减法（逆运算）」做容斥，而前缀异或是利用「相同数值进行异或结果为 0（偶数次的异或结果为 0）」的特性实现容斥。
+
+     */
     public int countTriplets(int[] arr) {
         int n = arr.length;
         int[] s = new int[n + 1];
