@@ -38,12 +38,15 @@ public class LeetCode930 {
 
     public int numSubarraysWithSum(int[] nums, int goal) {
         Map<Integer, Integer> map = new HashMap<>();
+        //垫下底
         map.put(0, 1);
         int sum = 0, res = 0;
 
         for (int num : nums){
             sum += num;
+            //当前前缀和已知，判断是否含有 presum - k的前缀和，那么我们就知道某一区间的和为 k 了。
             map.put(sum, map.getOrDefault(sum, 0) + 1);
+            //更新
             res += map.getOrDefault(sum - goal, 0);
         }
 
