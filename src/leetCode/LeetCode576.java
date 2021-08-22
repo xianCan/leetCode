@@ -82,6 +82,43 @@ public class LeetCode576 {
         return outCounts;
     }
 
+    //动态规划
+    public int findPaths3(int m, int n, int maxMove, int startRow, int startColumn){
+        int mod = 1000000007;
+        int[][][] dp = new int[m][n][maxMove + 1];
+
+        for (int i = 0; i < m; i++){
+            for (int j = 0; j < n; j++){
+                if (i == 0) add(dp, i, j, maxMove);
+                if (j == 0) add(dp, i, j, maxMove);
+                if (i == m - 1) add(dp, i, j, maxMove);
+                if (j == n - 1) add(dp, i, j, maxMove);
+            }
+        }
+
+        int[][] directions = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+        for (int step = 1; step <= maxMove; step++){
+            for (int i = 0; i < m; i++){
+                for (int j = 0; j < n; j++){
+                    for (int[] dir : directions){
+                        int row = i + dir[0], col = j + dir[1];
+                        if (row >= 0 && row < m && col >= 0 && col < n){
+                            dp[i][j][step] += dp[row][col][step - 1];
+                            dp[i][j][step] %= mod;
+                        }
+                    }
+                }
+            }
+        }
+        return dp[startRow][startColumn][maxMove];
+    }
+
+    private void add(int[][][] dp, int i, int j, int maxMove){
+        for (int step = 1; step <= maxMove; step++){
+            dp[i][j][step]++;
+        }
+    }
+
     public static void main(String[] args) {
         int dfs = new LeetCode576().findPaths(2, 2, 2, 0, 0);
         System.out.println(dfs);
