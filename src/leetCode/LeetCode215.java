@@ -42,15 +42,12 @@ public class LeetCode215 {
         return queue.peek();
     }
 
-    private int[] nums;
-
     public int findKthLargest2(int[] nums, int k){
-        this.nums = nums;
         int len = nums.length;
         int targetIndex = len - k;
         int left = 0, right = len - 1;
         while (true){
-            int i = partition(left, right);
+            int i = partition(nums, left, right);
             if (i == targetIndex){
                 return nums[i];
             } else if (i < targetIndex){
@@ -61,25 +58,25 @@ public class LeetCode215 {
         }
     }
 
-    private int partition(int left, int right){
+    private int partition(int[] nums, int left, int right){
         if (right > left){
             int random = left + new Random().nextInt(right-left);
-            swap(right, random);
+            swap(nums, right, random);
         }
 
         int i = left;
         int pivot = nums[right];
         for (int j=left; j<right; j++){
             if (nums[j] < pivot){
-                swap(i, j);
+                swap(nums, i, j);
                 i++;
             }
         }
-        swap(i, right);
+        swap(nums,i, right);
         return i;
     }
 
-    private void swap(int idx1, int idx2){
+    private void swap(int[] nums, int idx1, int idx2){
         int tmp = nums[idx1];
         nums[idx1] = nums[idx2];
         nums[idx2] = tmp;
